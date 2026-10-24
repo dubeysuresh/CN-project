@@ -1,0 +1,5 @@
+# Installed in the existing ../.venv. Ryu 4.34 requires setuptools 58 to build.
+ryu==4.34
+eventlet==0.41.3
+dnspython==2.9.0
+setuptools==58.0.4

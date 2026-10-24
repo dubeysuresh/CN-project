@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071116">
+  <meta name="description" content="Reproduce, inspect, understand.">
+  <title>Runbook &amp; limits · Dynamic Firewall</title>
+  <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Site navigation">
+      <a class="brand" href="../index.html" aria-label="Dynamic Firewall home">
+        <span class="brand-mark"><svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M14 4 23 9v10l-9 5-9-5V9l9-5Z" stroke="#70e4c5" stroke-width="1.6"/><circle cx="14" cy="9" r="2" fill="#70e4c5"/><circle cx="9" cy="17" r="2" fill="#70e4c5"/><circle cx="19" cy="17" r="2" fill="#70e4c5"/><path d="m14 11-4 5m5-5 3 5M11 17h6" stroke="#70e4c5" stroke-width="1.2"/></svg></span>
+        <span><strong>Dynamic Firewall</strong><span>SDN controller · module 02</span></span>
+      </a>
+      <div class="nav-label">Explore the project</div>
+      <nav class="site-nav" aria-label="Primary"><a class="nav-link" href="../index.html"><span class="nav-icon" aria-hidden="true">◈</span><span>Overview</span></a>
+<a class="nav-link" href="../pages/topology.html"><span class="nav-icon" aria-hidden="true">⌘</span><span>Topology &amp; architecture</span></a>
+<a class="nav-link" href="../pages/firewall.html"><span class="nav-icon" aria-hidden="true">◇</span><span>Firewall logic</span></a>
+<a class="nav-link" href="../pages/testing.html"><span class="nav-icon" aria-hidden="true">▥</span><span>Validation &amp; results</span></a>
+<a class="nav-link" href="../pages/evidence.html"><span class="nav-icon" aria-hidden="true">▦</span><span>Evidence gallery</span></a>
+<a class="nav-link" href="../pages/guide.html" aria-current="page"><span class="nav-icon" aria-hidden="true">↗</span><span>Runbook &amp; limits</span></a></nav>
+      <div class="side-foot"><div class="status-line"><span class="status-dot"></span> Verified on OVS</div><div>OpenFlow 1.3 · Ryu 4.34<br>Lab run: 24 Oct 2026</div></div>
+    </aside>
+    <main class="main" id="content">
+      <div class="topbar"><div class="crumb">PROJECT <span class="sep">/</span> DYNAMIC FIREWALL <span class="sep">/</span> <b>RUNBOOK &amp; LIMITS</b></div><div class="topbar-right"><span class="top-tag">11 / 11 integration checks passed</span><button class="menu-button" type="button" data-menu-toggle aria-label="Open navigation" aria-expanded="false">☰</button></div></div>
+      <div class="page-wrap"><div class="page-intro"><div class="eyebrow">05 / Operations</div><h1>Reproduce the lab. <span class="gradient-text">Know its limits.</span></h1><p class="lede">These are the exact launch and verification paths used for the project. The runbook starts with baseline connectivity, because a firewall cannot be judged against an already broken network.</p></div>
+
+<div class="grid grid-3"><div class="card"><div class="micro">Controller runtime</div><h3 style="margin-top:13px">Python 3.11.17</h3><p class="muted small">Ryu 4.34 · Eventlet 0.41.3 · dnspython 2.9.0 · setuptools 58.0.4</p></div><div class="card"><div class="micro">Network tooling</div><h3 style="margin-top:13px">Mininet 2.3.0</h3><p class="muted small">Open vSwitch 3.7.1 · Ubuntu Linux · OpenFlow 1.3</p></div><div class="card"><div class="micro">Bind addresses</div><h3 style="margin-top:13px">127.0.0.1 only</h3><p class="muted small">OpenFlow TCP 6653 · REST HTTP 8080</p></div></div>
+
+<section class="section" aria-labelledby="launch-heading"><div class="section-header"><div><span class="section-kicker">Launch sequence</span><h2 id="launch-heading">From environment to full verification.</h2></div><p>Run these from <span class="mono">/home/suresh/project/dynamic-firewall</span>. The controller uses the existing <span class="mono">../.venv</span>; Mininet's test runner uses Ubuntu's system Python.</p></div><div class="split split-even">
+  <div class="surface"><div class="micro">Step 01 · Prepare</div><h3 style="margin-top:12px">Install network packages and check Python.</h3><div class="code"><div class="code-head"><span>Ubuntu shell</span><span>prerequisites</span></div><pre>sudo apt-get install mininet openvswitch-switch<br>sudo systemctl start openvswitch-switch<br>cd /home/suresh/project/dynamic-firewall<br>bash scripts/bootstrap.sh</pre></div><p class="muted small">The bootstrap script pins old Ryu build tooling and applies its Eventlet WSGI compatibility fix inside the virtual environment.</p></div>
+  <div class="surface"><div class="micro">Step 02 · Controller</div><h3 style="margin-top:12px">Keep Ryu open in its own terminal.</h3><div class="code"><div class="code-head"><span>Terminal 1</span><span>no root</span></div><pre>cd /home/suresh/project/dynamic-firewall<br>bash scripts/run_controller.sh</pre></div><p class="muted small">Confirm TCP 6653 and 8080 are listening. The REST API is local to the machine.</p></div>
+  <div class="surface"><div class="micro">Step 03 · Unit verification</div><h3 style="margin-top:12px">Check rule construction before network use.</h3><div class="code"><div class="code-head"><span>Terminal 2</span><span>no root</span></div><pre>../.venv/bin/python -m unittest discover -s tests -v</pre></div><p class="muted small">Six tests cover validation, both drop matches, exact deletion, barrier-gated state, and reconnect replay.</p></div>
+  <div class="surface"><div class="micro">Step 04 · Real network test</div><h3 style="margin-top:12px">Run Mininet and OVS as root.</h3><div class="code"><div class="code-head"><span>Terminal 2</span><span>root required</span></div><pre>sudo /usr/bin/python3 tests/run_integration.py</pre></div><p class="muted small">Creates and removes the topology; refuses to block if baseline ping fails; writes the report, raw evidence, and timing.</p></div>
+</div></section>
+
+<section class="section" aria-labelledby="manual-heading"><div class="section-header"><div><span class="section-kicker">Manual inspection</span><h2 id="manual-heading">See each transition yourself.</h2></div><p>The automated runner follows this same order, with assertions and evidence capture added.</p></div><div class="surface"><div class="steps">
+  <div class="step"><div class="step-num">01</div><div><h4>Start the three-host topology</h4><p><span class="mono">sudo mn --custom topology.py --topo firewalltopo --switch ovsk,protocols=OpenFlow13 --controller remote,ip=127.0.0.1,port=6653</span></p></div></div>
+  <div class="step"><div class="step-num">02</div><div><h4>Prove the baseline</h4><p>At <span class="mono">mininet&gt;</span>, run <span class="mono">nodes</span>, <span class="mono">net</span>, and <span class="mono">pingall</span>. Stop and diagnose if the all-host result is not 0% loss.</p></div></div>
+  <div class="step"><div class="step-num">03</div><div><h4>Apply the block and inspect s1</h4><p><span class="mono">curl -X POST http://127.0.0.1:8080/firewall/block/10.0.0.2</span>, then <span class="mono">sudo ovs-ofctl -O OpenFlow13 dump-flows s1</span>.</p></div></div>
+  <div class="step"><div class="step-num">04</div><div><h4>Prove selective denial</h4><p>At <span class="mono">mininet&gt;</span>, run <span class="mono">h1 ping -c 3 h2</span>, <span class="mono">h3 ping -c 3 h2</span>, and <span class="mono">h1 ping -c 3 h3</span>. Expect 100%, 100%, and 0% loss respectively.</p></div></div>
+  <div class="step"><div class="step-num">05</div><div><h4>Remove policy and recover</h4><p><span class="mono">curl -X POST http://127.0.0.1:8080/firewall/unblock/10.0.0.2</span>. Verify the drops disappear from s1; then ping h2 and run <span class="mono">pingall</span> again.</p></div></div>
+</div></div></section>
+
+<section class="section" aria-labelledby="trouble-heading"><div class="section-header"><div><span class="section-kicker">Troubleshooting record</span><h2 id="trouble-heading">Issues found and how they were resolved.</h2></div><p>These are actual compatibility and execution problems encountered while building and testing the project.</p></div>
+  <details class="accordion"><summary>Ryu 4.34 build failed on modern setuptools</summary><div class="accordion-content"><p>Ryu's setup hook calls <span class="mono">easy_install.get_script_args</span>, which newer setuptools removed. The bootstrap script pins <span class="mono">setuptools==58.0.4</span> and installs Ryu with <span class="mono">--no-build-isolation</span> inside the Python 3.11 environment.</p></div></details>
+  <details class="accordion"><summary>Ryu imported Eventlet's removed ALREADY_HANDLED symbol</summary><div class="accordion-content"><p>The published Ryu release predates this Eventlet API change. Bootstrap patches Ryu's installed WSGI integration to use <span class="mono">getattr(eventlet.wsgi, 'ALREADY_HANDLED', None)</span>, matching upstream compatibility behavior. The controller then started and served REST requests.</p></div></details>
+  <details class="accordion"><summary>An older Eventlet release failed on Python 3.11</summary><div class="accordion-content"><p>Eventlet 0.30.2 tried to modify the immutable <span class="mono">TimeoutError</span> type. The working environment uses Eventlet 0.41.3 and dnspython 2.9.0 with the Ryu compatibility patch.</p></div></details>
+  <details class="accordion"><summary>Mininet initially refused to start</summary><div class="accordion-content"><p>Mininet requires root to create network namespaces and interfaces. The first unprivileged attempt exited before topology creation. After root authorization, the full network test passed.</p></div></details>
+  <details class="accordion"><summary>If baseline, blocking, or recovery fails on a future run</summary><div class="accordion-content"><p>Check <span class="mono">ss -ltnp</span> for ports 6653 and 8080, <span class="mono">ovs-vsctl get bridge s1 protocols</span>, and <span class="mono">ovs-ofctl -O OpenFlow13 dump-flows s1</span>. Verify priority 0 NORMAL before blocking, two priority 100 drops while blocked, and no drops after unblocking. Use <span class="mono">sudo mn -c</span> only if a previous Mininet run left stale interfaces.</p></div></details>
+</section>
+
+<section class="section" id="limits" aria-labelledby="limits-heading"><div class="section-header"><div><span class="section-kicker">Honest boundaries</span><h2 id="limits-heading">What this implementation does not claim.</h2></div><p>The lab demonstrates real IPv4 policy enforcement. It is intentionally not a production firewall or intrusion-detection system.</p></div><div class="grid grid-2">
+  <div class="card"><div class="micro">Protocol scope</div><h3 style="margin-top:12px">IPv4 only</h3><p class="muted">ARP, IPv6, and other EtherTypes remain outside the rule. A blocked client can still participate in ARP. The match covers IPv4 generally, but the executed payload test used ICMP pings, not separate TCP/UDP transfers.</p></div>
+  <div class="card"><div class="micro">Identity</div><h3 style="margin-top:12px">IP, not authenticated host</h3><p class="muted">The policy matches addresses without binding them to a switch port or MAC. A host that spoofs an allowed address could evade this demonstration design.</p></div>
+  <div class="card"><div class="micro">Availability</div><h3 style="margin-top:12px">In-memory policy</h3><p class="muted">A controller restart loses its desired blocked set and cleans stale firewall cookies on reconnect. Errors or timeouts can leave partial switch state; inspect OVS and reconnect for reconciliation.</p></div>
+  <div class="card"><div class="micro">Security operations</div><h3 style="margin-top:12px">Local administrative API</h3><p class="muted">REST binds to loopback and has no authentication. Automatic new-TCP-attempt detection was not implemented; counting arbitrary packets would not meet that feature's stated semantics.</p></div>
+</div></section>
+
+<section class="section"><div class="callout"><span class="callout-mark">↳</span><p><strong>Source and documentation:</strong> <a class="data-link" href="../../dynamic-firewall/README.md">project README</a>, <a class="data-link" href="../../dynamic-firewall/firewall_controller.py">Ryu controller</a>, <a class="data-link" href="../../dynamic-firewall/topology.py">Mininet topology</a>, <a class="data-link" href="../../dynamic-firewall/tests/run_integration.py">integration runner</a>, and the original <a class="data-link" href="../runbook.md">Markdown runbook</a>.</p></div></section>
+
+        <footer class="footer"><span>Dynamic Firewall / SDN Controller · Actual Mininet and OVS validation · 24 Oct 2026</span><a class="next-link" href="../index.html">Next: Overview <span aria-hidden="true">↗</span></a></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

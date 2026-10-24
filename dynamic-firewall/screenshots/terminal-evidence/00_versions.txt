@@ -1,0 +1,8 @@
+Python 3.11.17
+ovs-vsctl (Open vSwitch) 3.7.1
+ovs-ofctl (Open vSwitch) 3.7.1
+Name: ryu
+Version: 4.34
+Name: eventlet
+Version: 0.41.3
+2.3.0

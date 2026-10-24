@@ -1,0 +1,6 @@
+{
+  "blocked_ips": [
+    "10.0.0.2"
+  ],
+  "switch_connected": true
+}

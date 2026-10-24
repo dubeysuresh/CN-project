@@ -1,0 +1,104 @@
+{
+  "timestamp_utc": "2026-10-24T08:30:43.054943+00:00",
+  "tests": {
+    "topology": {
+      "hosts": [
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "switches": [
+        "s1"
+      ],
+      "links": [
+        "h1-eth0<->s1-eth1",
+        "h2-eth0<->s1-eth2",
+        "h3-eth0<->s1-eth3"
+      ],
+      "protocols": "[OpenFlow13]"
+    },
+    "baseline": {
+      "h1h2": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "03_baseline_h1h2.txt"
+      },
+      "h1h3": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "03_baseline_h1h3.txt"
+      },
+      "h2h3": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "03_baseline_h2h3.txt"
+      },
+      "h3h1": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "03_baseline_h3h1.txt"
+      }
+    },
+    "duplicate_block": {
+      "status": 409,
+      "body": {
+        "error": "Client is already blocked"
+      }
+    },
+    "blocked_pings": {
+      "h1h2": {
+        "success": false,
+        "packet_loss_percent": 100.0,
+        "evidence": "06_during_h1h2.txt"
+      },
+      "h3h2": {
+        "success": false,
+        "packet_loss_percent": 100.0,
+        "evidence": "06_during_h3h2.txt"
+      },
+      "h2h1": {
+        "success": false,
+        "packet_loss_percent": 100.0,
+        "evidence": "06_during_h2h1.txt"
+      },
+      "h1h3": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "06_during_h1h3.txt"
+      }
+    },
+    "repeated_unblock": {
+      "status": 404,
+      "body": {
+        "error": "Client is not blocked"
+      }
+    },
+    "recovery": {
+      "h1h2": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "09_recovery_h1h2.txt"
+      },
+      "h3h2": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "09_recovery_h3h2.txt"
+      },
+      "h2h1": {
+        "success": true,
+        "packet_loss_percent": 0.0,
+        "evidence": "09_recovery_h2h1.txt"
+      }
+    }
+  },
+  "measurements": {
+    "baseline_loss_percent": 0.0,
+    "drop_rules_before": 0,
+    "block_to_verified_flow_seconds": 0.0285,
+    "drop_rules_during": 2,
+    "unblock_to_verified_removal_seconds": 0.024,
+    "drop_rules_after": 0,
+    "recovery_loss_percent": 0.0
+  },
+  "status": "PASS"
+}

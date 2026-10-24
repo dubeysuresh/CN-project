@@ -1,0 +1,63 @@
+[
+  {
+    "method": "GET",
+    "path": "/firewall/blocked",
+    "status": 200,
+    "expected_status": 200,
+    "body": {
+      "blocked_ips": [],
+      "switch_connected": false
+    },
+    "pass": true
+  },
+  {
+    "method": "POST",
+    "path": "/firewall/block/10.0.0.2",
+    "status": 503,
+    "expected_status": 503,
+    "body": {
+      "error": "s1 is not connected to the controller"
+    },
+    "pass": true
+  },
+  {
+    "method": "POST",
+    "path": "/firewall/block/not-an-ip",
+    "status": 400,
+    "expected_status": 400,
+    "body": {
+      "error": "Invalid IPv4 address"
+    },
+    "pass": true
+  },
+  {
+    "method": "POST",
+    "path": "/firewall/block/10.0.1.1",
+    "status": 400,
+    "expected_status": 400,
+    "body": {
+      "error": "Address is outside 10.0.0.0/24"
+    },
+    "pass": true
+  },
+  {
+    "method": "POST",
+    "path": "/firewall/block/10.0.0.4",
+    "status": 400,
+    "expected_status": 400,
+    "body": {
+      "error": "Address is not one of the configured clients"
+    },
+    "pass": true
+  },
+  {
+    "method": "POST",
+    "path": "/firewall/unblock/10.0.0.2",
+    "status": 404,
+    "expected_status": 404,
+    "body": {
+      "error": "Client is not blocked"
+    },
+    "pass": true
+  }
+]

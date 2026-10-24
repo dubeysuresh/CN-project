@@ -1,0 +1,2 @@
+LISTEN 0      50         127.0.0.1:6653       0.0.0.0:*    users:(("ryu-manager",pid=13766,fd=5))
+LISTEN 0      50         127.0.0.1:8080       0.0.0.0:*    users:(("ryu-manager",pid=13766,fd=4))

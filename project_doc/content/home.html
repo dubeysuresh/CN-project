@@ -1,0 +1,58 @@
+<div class="hero">
+  <div class="eyebrow">Verified SDN security system</div>
+  <h1>Network policy, <span class="gradient-text">enforced at the switch.</span></h1>
+  <p class="lede">A Ryu controller turns a local REST request into OpenFlow 1.3 rules on a real Open vSwitch. The result is selective, reversible IPv4 blocking across a three-host Mininet network.</p>
+  <div class="hero-actions"><a class="button button-primary" href="{{ROOT}}pages/testing.html">Explore verified results <span aria-hidden="true">↗</span></a><a class="button button-secondary" href="{{ROOT}}pages/topology.html">Understand the system <span aria-hidden="true">→</span></a></div>
+  <div class="hero-insignia" aria-hidden="true">01/03</div>
+</div>
+
+<div class="grid grid-4" aria-label="Key verified measurements">
+  <div class="card metric-card"><div class="micro">Integration checks</div><div class="card-number">11<span style="color:#699b90">/</span>11</div><div class="card-label">Required phases passed</div><div class="card-note">Mininet + OVS + REST</div></div>
+  <div class="card metric-card"><div class="micro">Normal packet loss</div><div class="card-number">0<em>%</em></div><div class="card-label">Before and after the block</div><div class="card-note">All-host ping test</div></div>
+  <div class="card metric-card alert"><div class="micro">Blocked-client loss</div><div class="card-number">100<em>%</em></div><div class="card-label">h1 → h2 and h3 → h2</div><div class="card-note">h1 → h3 remained at 0%</div></div>
+  <div class="card metric-card"><div class="micro">OpenFlow drop entries</div><div class="card-number">0 → 2 → 0</div><div class="card-label">Before / block / recovery</div><div class="card-note">Directly observed on s1</div></div>
+</div>
+
+<section class="section" aria-labelledby="architecture-heading">
+  <div class="section-header"><div><span class="section-kicker">The system at a glance</span><h2 id="architecture-heading">One control plane.<br>One enforcement point.</h2></div><p>Ryu decides what the firewall policy should be. OVS executes that decision on packets. The REST response, switch table, and ping results are checked independently.</p></div>
+  <div class="split">
+    <div class="surface"><div class="surface-head"><span class="surface-title">Network topology</span><span class="tag">OPENFLOW 1.3</span></div>
+      <div class="topology-scroll"><svg class="topology-svg" viewBox="0 0 700 390" role="img" aria-label="Ryu controller on port 6653 connected to switch s1, which connects to h1, h2, and h3">
+        <defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <path class="line live" d="M350 92V173"/><path class="line" d="M350 238V290H122V305M350 290V305M350 290H578V305"/>
+        <text x="365" y="134" class="data-label">OF 1.3 · TCP 6653</text>
+        <rect class="node-bg active" x="230" y="21" width="240" height="70" rx="16"/><circle cx="257" cy="56" r="8" class="client-mark" filter="url(#glow)"/><text class="node-label" x="277" y="50">Ryu controller</text><text class="node-address" x="277" y="67">127.0.0.1 · API :8080</text>
+        <rect class="node-bg active" x="244" y="173" width="212" height="65" rx="16"/><path d="m269 193 9 7-9 7m16-14-9 7 9 7" stroke="#69e4c4" stroke-width="2" fill="none"/><text class="node-label" x="305" y="199">Open vSwitch s1</text><text class="node-address" x="305" y="217">DPID 0000000000000001</text>
+        <rect class="node-bg" x="54" y="305" width="136" height="62" rx="14"/><circle class="client-mark" cx="77" cy="336" r="6"/><text class="node-label" x="92" y="331">h1</text><text class="node-address" x="92" y="349">10.0.0.1</text>
+        <rect class="node-bg" x="282" y="305" width="136" height="62" rx="14"/><circle class="client-mark blocked" cx="305" cy="336" r="6"/><text class="node-label" x="320" y="331">h2</text><text class="node-address" x="320" y="349">10.0.0.2</text>
+        <rect class="node-bg" x="510" y="305" width="136" height="62" rx="14"/><circle class="client-mark" cx="533" cy="336" r="6"/><text class="node-label" x="548" y="331">h3</text><text class="node-address" x="548" y="349">10.0.0.3</text>
+      </svg></div><div class="mobile-hint">Swipe to inspect the full topology →</div>
+      <div class="legend"><span><i></i> Controller and normal traffic</span><span><i class="red"></i> Demonstration block target</span></div>
+    </div>
+    <div class="surface"><div class="surface-head"><span class="surface-title">How a block becomes real</span><span class="micro">CONTROL → DATA</span></div><div class="steps">
+      <div class="step"><div class="step-num">01</div><div><h4>Administrator requests a block</h4><p><span class="mono">POST /firewall/block/10.0.0.2</span> reaches Ryu on loopback port 8080.</p></div></div>
+      <div class="step"><div class="step-num">02</div><div><h4>Ryu programs s1</h4><p>Two priority-100 IPv4 drops match h2 as source or destination; a barrier confirms switch processing.</p></div></div>
+      <div class="step"><div class="step-num">03</div><div><h4>The network proves it</h4><p><span class="mono">ovs-ofctl</span> sees both drops. Pings involving h2 fail; h1 and h3 continue to communicate.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="transition-heading">
+  <div class="section-header"><div><span class="section-kicker">Observed behavior</span><h2 id="transition-heading">A reversible change in three states.</h2></div><p>The network was measured before the block, during it, and after exact deletion of the drop rules.</p></div>
+  <div class="surface"><div class="timeline">
+    <div class="timeline-node"><div class="time-dot">01</div><h4>Baseline</h4><p><span class="mono">0</span> drops · all-host ping <span class="mono">0% loss</span></p></div>
+    <div class="timeline-node"><div class="time-dot">02</div><h4>h2 blocked</h4><p><span class="mono">2</span> drops · h2 pings <span class="mono">100% loss</span></p></div>
+    <div class="timeline-node"><div class="time-dot">03</div><h4>Recovered</h4><p><span class="mono">0</span> drops · all-host ping <span class="mono">0% loss</span></p></div>
+  </div><div class="panel-note">The switch stayed up throughout. The controller removed only its own exact-match firewall entries; the priority-0 normal-forwarding rule remained available.</div></div>
+</section>
+
+<section class="section" aria-labelledby="map-heading"><div class="section-header"><div><span class="section-kicker">Navigate the report</span><h2 id="map-heading">Follow the reasoning to the evidence.</h2></div><p>Each section explains the mechanism, why it was chosen, and what the real test run showed.</p></div>
+  <div class="grid grid-2">
+    <a class="feature-card" href="{{ROOT}}pages/topology.html"><span class="feature-index">01 / SYSTEM</span><span class="feature-arrow">↗</span><h3>Topology & architecture</h3><p>The three hosts, OVS bridge, Ryu controller, network paths, and where decisions are enforced.</p></a>
+    <a class="feature-card" href="{{ROOT}}pages/firewall.html"><span class="feature-index">02 / MECHANISM</span><span class="feature-arrow">↗</span><h3>Firewall logic & choices</h3><p>Why two rules, why priority 100, why NORMAL forwarding, and how barrier replies gate API success.</p></a>
+    <a class="feature-card" href="{{ROOT}}pages/testing.html"><span class="feature-index">03 / PROOF</span><span class="feature-arrow">↗</span><h3>Validation & measurements</h3><p>All eleven integration phases, the traffic matrix, measured timing, and switch-rule counts.</p></a>
+    <a class="feature-card" href="{{ROOT}}pages/evidence.html"><span class="feature-index">04 / RECORD</span><span class="feature-arrow">↗</span><h3>Evidence gallery</h3><p>Twelve terminal screenshots plus the raw ping, API, topology, and OpenFlow output behind them.</p></a>
+  </div>
+</section>
+
+<section class="section"><div class="callout"><span class="callout-mark">↳</span><p><strong>Evidence standard.</strong> The site reports only measurements from the completed Mininet/OVS run. Screenshots were captured afterward from genuine saved terminal output; the raw files and machine-readable report are linked alongside them. Automatic threat detection was outside the implemented scope.</p></div></section>

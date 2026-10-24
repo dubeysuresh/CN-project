@@ -1,0 +1,20 @@
+/home/suresh/project/.venv/lib/python3.11/site-packages/ryu/lib/hub.py:30: EventletDeprecationWarning: 
+Eventlet is deprecated. It is currently being maintained in bugfix mode, and
+we strongly recommend against using it for new projects.
+
+If you are already using Eventlet, we recommend migrating to a different
+framework.  For more detail see
+https://eventlet.readthedocs.io/en/latest/asyncio/migration.html
+
+  import eventlet
+test_bidirectional_drop_rules_and_exact_deletion (test_controller.FirewallTests.test_bidirectional_drop_rules_and_exact_deletion) ... ok
+test_client_validation (test_controller.FirewallTests.test_client_validation) ... ok
+test_duplicate_and_missing_policy_errors (test_controller.FirewallTests.test_duplicate_and_missing_policy_errors) ... ok
+test_no_switch_does_not_change_policy (test_controller.FirewallTests.test_no_switch_does_not_change_policy) ... ok
+test_policy_updates_after_switch_barrier (test_controller.FirewallTests.test_policy_updates_after_switch_barrier) ... ok
+test_reconnect_replays_policy_above_normal_forwarding (test_controller.FirewallTests.test_reconnect_replays_policy_above_normal_forwarding) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.035s
+
+OK

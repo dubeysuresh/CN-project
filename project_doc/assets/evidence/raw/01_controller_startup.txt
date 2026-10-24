@@ -1,0 +1,78 @@
+/home/suresh/project/.venv/lib/python3.11/site-packages/ryu/lib/hub.py:30: EventletDeprecationWarning: 
+Eventlet is deprecated. It is currently being maintained in bugfix mode, and
+we strongly recommend against using it for new projects.
+
+If you are already using Eventlet, we recommend migrating to a different
+framework.  For more detail see
+https://eventlet.readthedocs.io/en/latest/asyncio/migration.html
+
+  import eventlet
+1 RLock(s) were not greened, to fix this error make sure you run eventlet.monkey_patch() before importing any other modules.
+loading app /home/suresh/project/dynamic-firewall/firewall_controller.py
+loading app ryu.controller.ofp_handler
+creating context wsgi
+instantiating app /home/suresh/project/dynamic-firewall/firewall_controller.py of DynamicFirewall
+instantiating app ryu.controller.ofp_handler of OFPHandler
+(13766) wsgi starting up on http://127.0.0.1:8080
+(13766) accepted ('127.0.0.1', 56634)
+127.0.0.1 - - [24/Oct/2026 08:18:47] "GET /firewall/blocked HTTP/1.1" 200 173 0.009044
+(13766) accepted ('127.0.0.1', 56646)
+127.0.0.1 - - [24/Oct/2026 08:18:47] "POST /firewall/block/10.0.0.2 HTTP/1.1" 503 194 0.003738
+(13766) accepted ('127.0.0.1', 56652)
+127.0.0.1 - - [24/Oct/2026 08:18:47] "POST /firewall/block/not-an-ip HTTP/1.1" 400 169 0.002968
+(13766) accepted ('127.0.0.1', 56656)
+127.0.0.1 - - [24/Oct/2026 08:18:47] "POST /firewall/block/10.0.1.1 HTTP/1.1" 400 179 0.002050
+(13766) accepted ('127.0.0.1', 56668)
+127.0.0.1 - - [24/Oct/2026 08:18:47] "POST /firewall/block/10.0.0.4 HTTP/1.1" 400 193 0.001258
+(13766) accepted ('127.0.0.1', 56672)
+127.0.0.1 - - [24/Oct/2026 08:18:47] "POST /firewall/unblock/10.0.0.2 HTTP/1.1" 404 168 0.000429
+(13766) accepted ('127.0.0.1', 59022)
+127.0.0.1 - - [24/Oct/2026 08:21:19] "GET /firewall/blocked HTTP/1.1" 200 154 0.000608
+s1 connected; normal forwarding and 0 block policies sent
+(13766) accepted ('127.0.0.1', 32888)
+127.0.0.1 - - [24/Oct/2026 08:23:02] "GET /firewall/blocked HTTP/1.1" 200 172 0.000854
+(13766) accepted ('127.0.0.1', 32904)
+Blocked client 10.0.0.2
+127.0.0.1 - - [24/Oct/2026 08:23:02] "POST /firewall/block/10.0.0.2 HTTP/1.1" 200 178 0.004141
+(13766) accepted ('127.0.0.1', 32920)
+127.0.0.1 - - [24/Oct/2026 08:23:02] "GET /firewall/blocked HTTP/1.1" 200 182 0.000704
+(13766) accepted ('127.0.0.1', 37050)
+Unblocked client 10.0.0.2
+127.0.0.1 - - [24/Oct/2026 08:23:14] "POST /firewall/unblock/10.0.0.2 HTTP/1.1" 200 179 0.002549
+(13766) accepted ('127.0.0.1', 37066)
+127.0.0.1 - - [24/Oct/2026 08:23:14] "GET /firewall/blocked HTTP/1.1" 200 172 0.000301
+s1 disconnected; policy changes unavailable until reconnection
+s1 connected; normal forwarding and 0 block policies sent
+(13766) accepted ('127.0.0.1', 48564)
+127.0.0.1 - - [24/Oct/2026 08:29:18] "GET /firewall/blocked HTTP/1.1" 200 172 0.001339
+(13766) accepted ('127.0.0.1', 48578)
+Blocked client 10.0.0.2
+127.0.0.1 - - [24/Oct/2026 08:29:18] "POST /firewall/block/10.0.0.2 HTTP/1.1" 200 178 0.002904
+(13766) accepted ('127.0.0.1', 48594)
+127.0.0.1 - - [24/Oct/2026 08:29:18] "GET /firewall/blocked HTTP/1.1" 200 182 0.000313
+(13766) accepted ('127.0.0.1', 57594)
+Unblocked client 10.0.0.2
+127.0.0.1 - - [24/Oct/2026 08:29:29] "POST /firewall/unblock/10.0.0.2 HTTP/1.1" 200 179 0.002738
+(13766) accepted ('127.0.0.1', 57602)
+127.0.0.1 - - [24/Oct/2026 08:29:29] "GET /firewall/blocked HTTP/1.1" 200 172 0.002098
+s1 disconnected; policy changes unavailable until reconnection
+s1 connected; normal forwarding and 0 block policies sent
+(13766) accepted ('127.0.0.1', 37926)
+127.0.0.1 - - [24/Oct/2026 08:30:56] "GET /firewall/blocked HTTP/1.1" 200 172 0.000726
+(13766) accepted ('127.0.0.1', 37930)
+Blocked client 10.0.0.2
+127.0.0.1 - - [24/Oct/2026 08:30:56] "POST /firewall/block/10.0.0.2 HTTP/1.1" 200 178 0.007500
+(13766) accepted ('127.0.0.1', 37940)
+127.0.0.1 - - [24/Oct/2026 08:30:56] "GET /firewall/blocked HTTP/1.1" 200 182 0.000741
+(13766) accepted ('127.0.0.1', 37942)
+127.0.0.1 - - [24/Oct/2026 08:30:56] "POST /firewall/block/10.0.0.2 HTTP/1.1" 409 171 0.000604
+(13766) accepted ('127.0.0.1', 36522)
+Unblocked client 10.0.0.2
+127.0.0.1 - - [24/Oct/2026 08:31:08] "POST /firewall/unblock/10.0.0.2 HTTP/1.1" 200 179 0.002222
+(13766) accepted ('127.0.0.1', 36524)
+127.0.0.1 - - [24/Oct/2026 08:31:08] "GET /firewall/blocked HTTP/1.1" 200 172 0.000340
+(13766) accepted ('127.0.0.1', 36538)
+127.0.0.1 - - [24/Oct/2026 08:31:08] "POST /firewall/unblock/10.0.0.2 HTTP/1.1" 404 168 0.000805
+s1 disconnected; policy changes unavailable until reconnection
+(13766) accepted ('127.0.0.1', 52552)
+127.0.0.1 - - [24/Oct/2026 08:32:04] "GET /firewall/blocked HTTP/1.1" 200 154 0.000273
